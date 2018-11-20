@@ -465,7 +465,21 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
+
+        let origin = app.coordinate(withNormalizedOffset: CGVector.zero)
+        var goBackHistoryButtonCoordinate:XCUICoordinate? = nil
+
+        if isTablet {
+            screenState.gesture(to: HomePanel_History) {
+            goBackHistoryButtonCoordinate = origin.withOffset(CGVector(dx: 114.0, dy: 252.0))
+                goBackHistoryButtonCoordinate?.tap()
+            }
+        } else {
+            screenState.gesture(to: HomePanel_History) {
+            goBackHistoryButtonCoordinate = origin.withOffset(CGVector(dx: 0.0, dy: 64.0))
+                goBackHistoryButtonCoordinate?.tap()
+            }
+        }
     }
 
     map.addScreenState(HistoryPanelContextMenu) { screenState in

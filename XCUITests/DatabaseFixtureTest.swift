@@ -24,6 +24,7 @@ class DatabaseFixtureTest: BaseTestCase {
 
     func testBookmarksDatabaseFixture() {
         navigator.goto(HomePanel_Bookmarks)
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
 
         let loaded = NSPredicate(format: "count == 1013")
         expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
