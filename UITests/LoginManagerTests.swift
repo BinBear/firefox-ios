@@ -613,7 +613,7 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertFalse(passwordField.isSecureTextEntry)
 
         tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedpassword")
-        tester().tapView(withAccessibilityLabel: "Next")
+        tester().tapView(withAccessibilityLabel: "Done")
 
         // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
         // responder chain since it's a cell so instead use the underlying tapAtPoint method.
