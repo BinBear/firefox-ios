@@ -73,10 +73,8 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Check that it appears in the reading list home panel
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Reading list"))
-            .perform(grey_tap())
+        BrowserUtils.openLibraryMenu(tester())
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
 
         // Tap to open it
         EarlGrey.selectElement(with: grey_accessibilityLabel("localhost"))
@@ -88,13 +86,14 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             .perform(grey_tap())
 
         // Check that it no longer appears in the reading list home panel
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Reading list"))
-            .perform(grey_tap())
-
+        BrowserUtils.openLibraryMenu(tester())
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
         waitForEmptyReadingList()
-        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
+
+        // Close the menu
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        BrowserUtils.closeLibraryMenu(tester())
     }
 
     func testReadingListAutoMarkAsRead() {
@@ -112,10 +111,9 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             .perform(grey_tap())
 
         // Check that it appears in the reading list home panel and make sure it marked as unread
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Reading list"))
-            .perform(grey_tap())
+        BrowserUtils.openLibraryMenu(tester())
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+
         tester().waitForView(withAccessibilityLabel: "Readable page, unread, localhost")
         // Select to Read
         EarlGrey.selectElement(with: grey_accessibilityLabel("localhost"))
@@ -123,10 +121,11 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("Readable page")
 
         // Go back to the reading list panel
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Reading list"))
-            .perform(grey_tap())
+        BrowserUtils.openLibraryMenu(tester())
+
+        // Workaround bug 1508368
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
 
         // Make sure the article is marked as read
         EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
@@ -146,7 +145,9 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // check the entry no longer exist
         waitForEmptyReadingList()
-        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
+
+        // Close Reading (and so Library) panel
+        BrowserUtils.closeLibraryMenu(tester())
     }
 
     override func tearDown() {
