@@ -125,9 +125,11 @@ class HistoryTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
 
         EarlGrey.selectElement(with: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.4, 0.4))
-        EarlGrey.selectElement(with:grey_accessibilityLabel("Delete"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
-            .perform(grey_tap())
+        if !BrowserUtils.iPad() {
+            EarlGrey.selectElement(with:grey_accessibilityLabel("Delete"))
+                .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
+                .perform(grey_tap())
+        }
 
         // The history list still exists
         EarlGrey.selectElement(with: grey_accessibilityID("History List"))
