@@ -138,12 +138,21 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         // Remove the list entry
         EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
             .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
-            .perform(grey_swipeSlowInDirection(GREYDirection.left))
+            .perform(grey_swipeSlowInDirectionWithStartPoint(GREYDirection.left, 0.1, 0.1))
+
         EarlGrey.selectElement(with: grey_accessibilityLabel("Remove"))
             .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
             .perform(grey_tap())
 
         // check the entry no longer exist
+        // workaround only for iPad to bug not showing the panel ok until coming back
+        if BrowserUtils.iPad() {
+            tester().waitForAnimationsToFinish()
+            tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+            tester().waitForAnimationsToFinish()
+            tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+            tester().waitForAnimationsToFinish(withTimeout: 3)
+        }
         waitForEmptyReadingList()
 
         // Close Reading (and so Library) panel
