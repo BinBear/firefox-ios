@@ -80,8 +80,13 @@ class BookmarksPanelTests: KIFTestCase {
         EarlGrey.selectElement(with: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
 
         // Tapping on Bookmarks to get back to initial bookmark panel, need to use coordinates, no id or label for button
-        let cgPoint = CGPoint(x: 0.0, y: 64.0)
-        tester().tapScreen(at: cgPoint)
+        var bookmarksGoBackButton = CGPoint()
+        if BrowserUtils.iPad() {
+            bookmarksGoBackButton = CGPoint(x: 114.0, y: 252.0)
+        } else {
+            bookmarksGoBackButton = CGPoint(x: 0.0, y: 64.0)
+        }
+        tester().tapScreen(at: bookmarksGoBackButton)
 
         // Closing Library Panel
         BrowserUtils.closeLibraryMenu(tester())
